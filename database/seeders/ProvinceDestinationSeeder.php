@@ -68,6 +68,6 @@ class ProvinceDestinationSeeder extends Seeder
             }
         }
 
-        DB::table('province_destination')->insert($data);
+        DB::table('province_destinations')->insert($data);
     }
 }

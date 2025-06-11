@@ -12,7 +12,7 @@ class EventDestinationSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('event_destination')->insert([
+        DB::table('event_destinations')->insert([
             // Khmer New Year linked to Siem Reap (assume destination_id = 2)
             ['event_id' => 1, 'destination_id' => 2, 'created_at' => now(), 'updated_at' => now()],
 
