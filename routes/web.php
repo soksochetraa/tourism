@@ -7,6 +7,8 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventDestinationController;
 use App\Http\Controllers\ProvinceController;
 use App\Http\Controllers\ProvinceDestinationController;
+use App\Http\Controllers\RestaurantController;
+use App\Http\Controllers\ProvinceRestaurantController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -15,7 +17,6 @@ Route::get('/', function () {
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-// Everyone can read
 Route::get('/destinations', [DestinationController::class, 'index']);
 Route::get('/destinations/{id}', [DestinationController::class, 'show']);
 Route::get('/destinations/name/{name}', [DestinationController::class, 'showByName']);
@@ -36,12 +37,19 @@ Route::get('/provincedestination', [ProvinceDestinationController::class, 'index
 Route::get('/provincedestination/{id}', [ProvinceDestinationController::class, 'show']);
 Route::get('/provincedestination/province/{provinceName}', [ProvinceDestinationController::class, 'showByProvinceName']);
 
+Route::get('/restaurants', [RestaurantController::class, 'index']);
+Route::get('/restaurants/{id}', [RestaurantController::class, 'show']);
+Route::get('/restaurants/name/{name}', [RestaurantController::class, 'showByName']);
+
+Route::get('/provincerestaurant', [ProvinceRestaurantController::class, 'index']);
+Route::get('/provincerestaurant/{id}', [ProvinceRestaurantController::class, 'show']);
+Route::get('/provincerestaurant/restaurant/{restaurantName}', [ProvinceRestaurantController::class, 'showByRestaurantName']);
+
 Route::middleware('jwt.auth')->group(function () {
     Route::get('/user', function () {
         return response()->json(auth()->user());
     });
 
-    // Only admin can create, update, delete
     Route::middleware('admin')->group(function () {
 
         //Destination
@@ -68,6 +76,16 @@ Route::middleware('jwt.auth')->group(function () {
         Route::post('/provincedestination', [ProvinceDestinationController::class, 'store']);
         Route::patch('/provincedestination/{id}', [ProvinceDestinationController::class, 'update']);
         Route::delete('/provincedestination/{id}', [ProvinceDestinationController::class, 'destroy']);   
+
+        //Restaurant
+        Route::post('/restaurants', [RestaurantController::class, 'store']);
+        Route::patch('/restaurants/{id}', [RestaurantController::class, 'update']);
+        Route::delete('/restaurants/{id}', [RestaurantController::class, 'destroy']);
+
+        //ProvinceRestaurant
+        Route::post('/provincerestaurant', [ProvinceRestaurantController::class, 'store']);
+        Route::patch('/provincerestaurant/{id}', [ProvinceRestaurantController::class, 'update']);
+        Route::delete('/provincerestaurant/{id}', [ProvinceRestaurantController::class, 'destroy']);
 
     });
 });

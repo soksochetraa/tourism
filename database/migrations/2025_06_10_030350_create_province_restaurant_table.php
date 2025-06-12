@@ -11,26 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('province_restaurant', function (Blueprint $table) {
+        Schema::create('province_restaurants', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('province_id');
             $table->unsignedBigInteger('restaurant_id');
             $table->timestamps();
 
-            // Foreign key constraints
             $table->foreign('province_id')->references('id')->on('provinces')->onDelete('cascade');
             $table->foreign('restaurant_id')->references('id')->on('restaurants')->onDelete('cascade');
-
-            // Optional: Unique constraint to avoid duplicate pairs
-            $table->unique(['province_id', 'restaurant_id']);
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('province_restaurant');
+        Schema::dropIfExists('province_restaurants');
     }
 };

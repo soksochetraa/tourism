@@ -11,4 +11,9 @@ class Province extends Model
         'description',
         'region',
     ];
+
+    public function provinceRestaurants()
+    {
+        return $this->hasMany(ProvinceRestaurant::class);
+    }
 }

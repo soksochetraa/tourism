@@ -21,8 +21,6 @@ return new class extends Migration
             $table->foreign('province_id')->references('id')->on('provinces')->onDelete('cascade');
             $table->foreign('destination_id')->references('id')->on('destinations')->onDelete('cascade');
 
-            // Unique constraint to avoid duplicates
-            $table->unique(['province_id', 'destination_id']);
         });
     }
 

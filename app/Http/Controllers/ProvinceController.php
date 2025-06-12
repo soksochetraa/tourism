@@ -49,7 +49,8 @@ class ProvinceController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'country_id' => 'required|exists:countries,id',
+            'description' => 'nullable|string',
+            'region' => 'nullable|string|max:255'
         ]);
 
         $province = Province::create($validated);
@@ -70,7 +71,8 @@ class ProvinceController extends Controller
 
         $validated = $request->validate([
             'name' => 'sometimes|required|string|max:255',
-            'country_id' => 'sometimes|required|exists:countries,id',
+            'description' => 'sometimes|nullable|string',
+            'region' => 'sometimes|nullable|string|max:255'
         ]);
 
         $province->update($validated);

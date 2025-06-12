@@ -21,8 +21,6 @@ return new class extends Migration
             $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
             $table->foreign('destination_id')->references('id')->on('destinations')->onDelete('cascade');
 
-            // Prevent duplicate entries for the same event-destination pair
-            $table->unique(['event_id', 'destination_id']);
         });
     }
 

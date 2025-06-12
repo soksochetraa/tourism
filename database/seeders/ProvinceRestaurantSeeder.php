@@ -23,6 +23,6 @@ class ProvinceRestaurantSeeder extends Seeder
             ];
         }
 
-        DB::table('province_restaurant')->insert($data);
+        DB::table('province_restaurants')->insert($data);
     }
 }
