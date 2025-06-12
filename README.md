@@ -323,6 +323,9 @@ The API is available at:
     "province_id": 13
 }
 ```
+## EER Diagram
+
+![Alt text](EERDiagram.jpg)
 
 ## Default Users
 
