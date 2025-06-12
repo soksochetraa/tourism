@@ -11,12 +11,6 @@ A RESTful API for an Tourism built with Laravel.
 - Comprehensive API documentation  
 - Database migrations and seeders   
 
-## Requirements
-
-- PHP 8.1 or higher  
-- Composer  
-- MySQL or DBeaver  
-
 ## Installation
 
 1. **Clone the repository:**
