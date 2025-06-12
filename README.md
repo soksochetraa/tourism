@@ -1,61 +1,351 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Tourism API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A RESTful API for an Tourism built with Laravel.
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Full CRUD operations for users, products, categories, and orders  
+- Authentication using Laravel Sanctum  
+- Role-based authorization (admin/user)  
+- Robust validation and error handling  
+- Comprehensive API documentation  
+- Database migrations and seeders   
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Requirements
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- PHP 8.1 or higher  
+- Composer  
+- MySQL or DBeaver  
 
-## Learning Laravel
+## Installation
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+1. **Clone the repository:**
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+   ```bash
+   git clone https://github.com/soksochetraa/tourism.git
+   cd tourism
+    ```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+2. **Install dependencies:**
 
-## Laravel Sponsors
+   ```bash
+   composer install
+   ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+3. **Copy the `.env` file:**
 
-### Premium Partners
+   ```bash
+   cp .env.example .env
+   ```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+4. **Generate the Laravel application key:**
 
-## Contributing
+   ```bash
+   php artisan key:generate
+   ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+5. **Configure your database in `.env`:**
 
-## Code of Conduct
+   ```
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=tourism
+   DB_USERNAME=root
+   DB_PASSWORD=
+   ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+6. **Install JWT Auth package:**
 
-## Security Vulnerabilities
+   ```bash
+   composer require tymon/jwt-auth
+   ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+7. **Publish the JWT configuration:**
+
+   ```bash
+   php artisan vendor:publish --provider="Tymon\JWTAuth\Providers\LaravelServiceProvider"
+   ```
+
+8. **Generate the JWT secret key:**
+
+   ```bash
+   php artisan jwt:secret
+   ```
+
+   This command will add a `JWT_SECRET=...` entry to your `.env` file.
+
+9. **Run database migrations and seeders:**
+
+   ```bash
+   php artisan migrate --seed
+   ```
+
+10. **Start the development server:**
+
+    ```bash
+    php -S 127.0.0.1:8888 -t public
+    ```
+## API Documentation
+
+The API is available at:
+`http://127.0.0.1:8888`
+
+### Authentication Endpoints
+
+| Method | Endpoint      | Description                                         |
+| ------ | ------------- | --------------------------------------------------- |
+| POST   | /register     | Register a new user                                 |
+| POST   | /login        | Log in an existing user                             |
+
+**Example Requests :**
+
+**POST : http://127.0.0.1:8888/register**
+```
+{
+    "name": "User",
+    "email": "user@example.com",
+    "password": "password123",
+    "password_confirmation": "password123"
+}
+```
+**POST : http://127.0.0.1:8888/register**
+```
+{
+    "name": "Admin",
+    "email": "admin@example.com",
+    "role": "admin",
+    "password": "password123",
+    "password_confirmation": "password123"
+}
+```
+**POST : http://127.0.0.1:8888/login**
+```
+{
+    "email": "user@example.com",
+    "password": "password123"
+}
+```
+### Destination Endpoints
+
+| Method | Endpoint                       | Description                        |
+| ------ | ------------------------------ | ---------------------------------- |
+| GET    | /destinations                  | List all destinations              |
+| GET    | /destinations/{id}             | Get a specific destination by ID   |
+| GET    | /destinations/name/{name}      | Get a specific destination by name |
+| POST   | /destinations                  | Create any destination (admin)     |
+| PATCH  | /destinations/{id}             | Update any destination (admin)     |
+| DELETE | /destinations/{id}             | Delete any destination (admin)     |
+
+**Example Requests :**
+
+**POST : http://127.0.0.1:8888/destinations**
+```
+{
+    "name": "Angkor Wat",
+    "location": "Siem Reap",
+    "description": "Ancient temple complex"
+}
+```
+**PATCH : http://127.0.0.1:8888/destinations/{id}**
+```
+{
+    "name": "Angkor Wat",
+    "location": "Siem Reap"
+}
+```
+### Events Endpoints
+
+| Method | Endpoint                       | Description                        |
+| ------ | ------------------------------ | ---------------------------------- |
+| GET    | /events                        | List all events                    |
+| GET    | /events/{id}                   | Get a specific events by ID        |
+| GET    | /events/name/{name}            | Get a specific events by name      |
+| POST   | /events                        | Create any events (admin)          |
+| PATCH  | /events/{id}                   | Update any events (admin)          |
+| DELETE | /events/{id}                   | Delete any events (admin)          |
+
+**Example Requests :**
+
+**POST : http://127.0.0.1:8888/events**
+```
+{
+    "name": "Khmer New Year II",
+    "description": "Traditional Cambodian New Year festival celebrated in April.",
+    "location": "Siem Reap",
+    "start_date": "2025-04-13 00:00:00",
+    "end_date": "2025-04-15 00:00:00"
+}
+```
+**PATCH : http://127.0.0.1:8888/events/{id}**
+```
+{
+    "name": "Khmer New Year II",
+    "description": "Traditional Cambodian New Year festival celebrated in April."
+}
+```
+
+### Events Destination Endpoints ( Pivot Table )
+
+| Method | Endpoint                       | Description                                  |
+| ------ | ------------------------------ | -------------------------------------------- |
+| GET    | /eventdestination                        | List all events destination        |
+| GET    | /eventdestination/{id}                   | Get a specific events destination by ID        |
+| GET    | /eventdestination/event/{name}           | Get a specific events destination by name      |
+| POST   | /eventdestination                        | Create any events destination (admin)          |
+| PATCH  | /eventdestination/{id}                   | Update any events destination (admin)          |
+| DELETE | /eventdestination/{id}                   | Delete any events destination (admin)          |
+
+**Example Requests :**
+
+**POST : http://127.0.0.1:8888/eventdestination**
+```
+{
+    "event_id": 1,
+    "destination_id": 6
+}
+```
+**PATCH : http://127.0.0.1:8888/eventdestination/{id}**
+```
+{
+    "event_id": 1
+}
+```
+
+### Province Endpoints
+
+| Method | Endpoint                       | Description                                  |
+| ------ | ------------------------------ | -------------------------------------------- |
+| GET    | /provinces                        | List all province        |
+| GET    | /provinces/{id}                   | Get a specific province by ID        |
+| GET    | /provinces/name/{name}            | Get a specific province by name      |
+| POST   | /provinces                        | Create any province (admin)          |
+| PATCH  | /provinces/{id}                   | Update any province (admin)          |
+| DELETE | /provinces/{id}                   | Delete any province (admin)          |
+
+**Example Requests :**
+
+**POST : http://127.0.0.1:8888/provinces**
+```
+{
+    "name": "Phnom Penh",
+    "description": "Cambodia's Capital City",
+    "region": "Cambodia"
+}
+```
+**PATCH : http://127.0.0.1:8888/provinces/{id}**
+```
+{
+    "name": "Phnom Penh",
+    "description": "Cambodia's Capital"
+}
+```
+### Province Destination Endpoints ( Pivot Table )
+
+| Method | Endpoint                       | Description                                  |
+| ------ | ------------------------------ | -------------------------------------------- |
+| GET    | /provincedestination                        | List all province        |
+| GET    | /provincedestination/{id}                   | Get a specific province by ID        |
+| GET    | /provincedestination/province/{name}        | Get a specific province by name      |
+| POST   | /provincedestination                        | Create any province (admin)          |
+| PATCH  | /provincedestination/{id}                   | Update any province (admin)          |
+| DELETE | /provincedestination/{id}                   | Delete any province (admin)          |
+
+**Example Requests :**
+
+**POST : http://127.0.0.1:8888/provincedestination**
+```
+{
+    "province_id": 23,
+    "destination_id": 1
+}
+```
+**PATCH : http://127.0.0.1:8888/provincedestination/{id}**
+```
+{
+    "province_id": 23
+}
+```
+### Restaurant Endpoints 
+
+| Method | Endpoint                       | Description                                  |
+| ------ | ------------------------------ | -------------------------------------------- |
+| GET    | /restaurants                        | List all restaurant        |
+| GET    | /restaurants/{id}                   | Get a specific restaurant by ID        |
+| GET    | /restaurants/name/{name}            | Get a specific restaurant by name      |
+| POST   | /restaurants                        | Create any restaurant (admin)          |
+| PATCH  | /restaurants/{id}                   | Update any restaurant (admin)          |
+| DELETE | /restaurants/{id}                   | Delete any restaurant (admin)          |
+
+**Example Requests :**
+
+**POST : http://127.0.0.1:8888/restaurants**
+```
+{
+    "name": "The Khmer Kitchen",
+    "address": "123 Sisowath Quay, Phnom Penh",
+    "phone": "+8551234567",
+    "email": "restaunrant@example.com",
+    "website": null,
+    "description": "Good taste!",
+    "opening_hours": "6:00 - 19:00"
+}
+```
+**PATCH : http://127.0.0.1:8888/restaurants/{id}**
+```
+{
+    "name": "The Khmer Kitchen II"
+}
+```
+### Province Restaurant Endpoints ( Pivot Table )
+
+| Method | Endpoint                       | Description                                  |
+| ------ | ------------------------------ | -------------------------------------------- |
+| GET    | /provincerestaurant                        | List all restaurant        |
+| GET    | /provincerestaurant/{id}                   | Get a specific restaurant by ID        |
+| GET    | /provincerestaurant/restaurant/{name}      | Get a specific restaurant by name      |
+| POST   | /provincerestaurant                        | Create any restaurant (admin)          |
+| PATCH  | /provincerestaurant/{id}                   | Update any restaurant (admin)          |
+| DELETE | /provincerestaurant/{id}                   | Delete any restaurant (admin)          |
+
+**Example Requests :**
+
+**POST : http://127.0.0.1:8888/provincerestaurant**
+```
+{
+    "province_id": 13,
+    "restaurant_id": 12
+}
+```
+**PATCH : http://127.0.0.1:8888/provincerestaurant/{id}**
+```
+{
+    "province_id": 13
+}
+```
+
+## Default Users
+
+After seeding the database, the following users are available:
+
+**Admin**
+
+* Email: `admin@example.com`
+* Password: `password123`
+
+**Regular User**
+
+* Email: `user@example.com`
+* Password: `password123`
+
+## Testing
+
+To run the tests:
+
+```bash
+php -S 127.0.0.1:8888 -t public
+```
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is open-source software licensed under the [MIT license](LICENSE).
