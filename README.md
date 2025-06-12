@@ -1,44 +1,39 @@
-# Tourism API
+# Tourism
 
-A RESTful API for an Tourism built with Laravel.
+A RESTful API for a tourism platform built with Laravel.
 
 ## Features
 
-- Full CRUD operations for users, products, categories, and orders  
-- Authentication using Laravel Sanctum  
-- Role-based authorization (admin/user)  
-- Robust validation and error handling  
-- Comprehensive API documentation  
-- Database migrations and seeders   
+* Full CRUD operations for users, destinations, events, provinces, and restaurants
+* Authentication via Laravel Sanctum and JWT
+* Role-based access control (admin/user)
+* Robust validation and error handling
+* Comprehensive API documentation
+* Database migrations and seeders included
 
-## Installation
+## Installation Guide
 
-1. **Clone the repository:**
+1. **Clone the repository**
 
    ```bash
    git clone https://github.com/soksochetraa/tourism.git
    cd tourism
-    ```
+   ```
 
-2. **Install dependencies:**
+2. **Install dependencies**
 
    ```bash
    composer install
    ```
 
-3. **Copy the `.env` file:**
+3. **Configure the environment**
 
    ```bash
    cp .env.example .env
-   ```
-
-4. **Generate the Laravel application key:**
-
-   ```bash
    php artisan key:generate
    ```
 
-5. **Configure your database in `.env`:**
+4. **Set up the database connection in `.env`**
 
    ```
    DB_CONNECTION=mysql
@@ -49,283 +44,250 @@ A RESTful API for an Tourism built with Laravel.
    DB_PASSWORD=
    ```
 
-6. **Install JWT Auth package:**
+5. **Install and configure JWT Authentication**
 
    ```bash
    composer require tymon/jwt-auth
-   ```
-
-7. **Publish the JWT configuration:**
-
-   ```bash
    php artisan vendor:publish --provider="Tymon\JWTAuth\Providers\LaravelServiceProvider"
-   ```
-
-8. **Generate the JWT secret key:**
-
-   ```bash
    php artisan jwt:secret
    ```
 
-   This command will add a `JWT_SECRET=...` entry to your `.env` file.
-
-9. **Run database migrations and seeders:**
+6. **Run migrations and seeders**
 
    ```bash
    php artisan migrate --seed
    ```
 
-10. **Start the development server:**
+7. **Start the development server**
 
-    ```bash
-    php -S 127.0.0.1:8888 -t public
-    ```
+   ```bash
+   php -S 127.0.0.1:8888 -t public
+   ```
+
+---
+
 ## API Documentation
 
-The API is available at:
-`http://127.0.0.1:8888`
+**Base URL:** `http://127.0.0.1:8888`
 
 ### Authentication Endpoints
 
-| Method | Endpoint      | Description                                         |
-| ------ | ------------- | --------------------------------------------------- |
-| POST   | /register     | Register a new user                                 |
-| POST   | /login        | Log in an existing user                             |
+| Method | Endpoint  | Description         |
+| ------ | --------- | ------------------- |
+| POST   | /register | Register a new user |
+| POST   | /login    | Log in a user       |
 
-**Example Requests :**
+**Example: Register User**
 
-**POST : http://127.0.0.1:8888/register**
-```
+```json
 {
-    "name": "User",
-    "email": "user@example.com",
-    "password": "password123",
-    "password_confirmation": "password123"
+  "name": "User",
+  "email": "user@example.com",
+  "password": "password123",
+  "password_confirmation": "password123"
 }
 ```
-**POST : http://127.0.0.1:8888/register**
-```
+
+**Example: Register Admin**
+
+```json
 {
-    "name": "Admin",
-    "email": "admin@example.com",
-    "role": "admin",
-    "password": "password123",
-    "password_confirmation": "password123"
+  "name": "Admin",
+  "email": "admin@example.com",
+  "role": "admin",
+  "password": "password123",
+  "password_confirmation": "password123"
 }
 ```
-**POST : http://127.0.0.1:8888/login**
-```
+
+**Example: Login**
+
+```json
 {
-    "email": "user@example.com",
-    "password": "password123"
+  "email": "user@example.com",
+  "password": "password123"
 }
 ```
-### Destination Endpoints
+
+---
+
+## Resource Endpoints
+
+### Destinations
+
+| Method | Endpoint                  | Description                     |
+| ------ | ------------------------- | ------------------------------- |
+| GET    | /destinations             | List all destinations           |
+| GET    | /destinations/{id}        | Get destination by ID           |
+| GET    | /destinations/name/{name} | Get destination by name         |
+| POST   | /destinations             | Create destination (admin only) |
+| PATCH  | /destinations/{id}        | Update destination (admin only) |
+| DELETE | /destinations/{id}        | Delete destination (admin only) |
+
+**Example: Create Destination**
+
+```json
+{
+  "name": "Angkor Wat",
+  "location": "Siem Reap",
+  "description": "Ancient temple complex"
+}
+```
+
+---
+
+### Events
+
+| Method | Endpoint            | Description               |
+| ------ | ------------------- | ------------------------- |
+| GET    | /events             | List all events           |
+| GET    | /events/{id}        | Get event by ID           |
+| GET    | /events/name/{name} | Get event by name         |
+| POST   | /events             | Create event (admin only) |
+| PATCH  | /events/{id}        | Update event (admin only) |
+| DELETE | /events/{id}        | Delete event (admin only) |
+
+**Example: Create Event**
+
+```json
+{
+  "name": "Khmer New Year",
+  "description": "Cambodian New Year festival.",
+  "location": "Siem Reap",
+  "start_date": "2025-04-13 00:00:00",
+  "end_date": "2025-04-15 00:00:00"
+}
+```
+
+---
+
+### Event-Destination (Pivot)
 
 | Method | Endpoint                       | Description                        |
 | ------ | ------------------------------ | ---------------------------------- |
-| GET    | /destinations                  | List all destinations              |
-| GET    | /destinations/{id}             | Get a specific destination by ID   |
-| GET    | /destinations/name/{name}      | Get a specific destination by name |
-| POST   | /destinations                  | Create any destination (admin)     |
-| PATCH  | /destinations/{id}             | Update any destination (admin)     |
-| DELETE | /destinations/{id}             | Delete any destination (admin)     |
+| GET    | /eventdestination              | List all event-destination records |
+| GET    | /eventdestination/{id}         | Get record by ID                   |
+| GET    | /eventdestination/event/{name} | Get by event name                  |
+| POST   | /eventdestination              | Create record (admin only)         |
+| PATCH  | /eventdestination/{id}         | Update record (admin only)         |
+| DELETE | /eventdestination/{id}         | Delete record (admin only)         |
 
-**Example Requests :**
+**Example: Link Event to Destination**
 
-**POST : http://127.0.0.1:8888/destinations**
-```
+```json
 {
-    "name": "Angkor Wat",
-    "location": "Siem Reap",
-    "description": "Ancient temple complex"
-}
-```
-**PATCH : http://127.0.0.1:8888/destinations/{id}**
-```
-{
-    "name": "Angkor Wat",
-    "location": "Siem Reap"
-}
-```
-### Events Endpoints
-
-| Method | Endpoint                       | Description                        |
-| ------ | ------------------------------ | ---------------------------------- |
-| GET    | /events                        | List all events                    |
-| GET    | /events/{id}                   | Get a specific events by ID        |
-| GET    | /events/name/{name}            | Get a specific events by name      |
-| POST   | /events                        | Create any events (admin)          |
-| PATCH  | /events/{id}                   | Update any events (admin)          |
-| DELETE | /events/{id}                   | Delete any events (admin)          |
-
-**Example Requests :**
-
-**POST : http://127.0.0.1:8888/events**
-```
-{
-    "name": "Khmer New Year II",
-    "description": "Traditional Cambodian New Year festival celebrated in April.",
-    "location": "Siem Reap",
-    "start_date": "2025-04-13 00:00:00",
-    "end_date": "2025-04-15 00:00:00"
-}
-```
-**PATCH : http://127.0.0.1:8888/events/{id}**
-```
-{
-    "name": "Khmer New Year II",
-    "description": "Traditional Cambodian New Year festival celebrated in April."
+  "event_id": 1,
+  "destination_id": 6
 }
 ```
 
-### Events Destination Endpoints ( Pivot Table )
+---
 
-| Method | Endpoint                       | Description                                  |
-| ------ | ------------------------------ | -------------------------------------------- |
-| GET    | /eventdestination                        | List all events destination        |
-| GET    | /eventdestination/{id}                   | Get a specific events destination by ID        |
-| GET    | /eventdestination/event/{name}           | Get a specific events destination by name      |
-| POST   | /eventdestination                        | Create any events destination (admin)          |
-| PATCH  | /eventdestination/{id}                   | Update any events destination (admin)          |
-| DELETE | /eventdestination/{id}                   | Delete any events destination (admin)          |
+### Provinces
 
-**Example Requests :**
+| Method | Endpoint               | Description                  |
+| ------ | ---------------------- | ---------------------------- |
+| GET    | /provinces             | List all provinces           |
+| GET    | /provinces/{id}        | Get province by ID           |
+| GET    | /provinces/name/{name} | Get province by name         |
+| POST   | /provinces             | Create province (admin only) |
+| PATCH  | /provinces/{id}        | Update province (admin only) |
+| DELETE | /provinces/{id}        | Delete province (admin only) |
 
-**POST : http://127.0.0.1:8888/eventdestination**
-```
+**Example: Create Province**
+
+```json
 {
-    "event_id": 1,
-    "destination_id": 6
-}
-```
-**PATCH : http://127.0.0.1:8888/eventdestination/{id}**
-```
-{
-    "event_id": 1
+  "name": "Phnom Penh",
+  "description": "Cambodia's capital city",
+  "region": "Cambodia"
 }
 ```
 
-### Province Endpoints
+---
 
-| Method | Endpoint                       | Description                                  |
-| ------ | ------------------------------ | -------------------------------------------- |
-| GET    | /provinces                        | List all province        |
-| GET    | /provinces/{id}                   | Get a specific province by ID        |
-| GET    | /provinces/name/{name}            | Get a specific province by name      |
-| POST   | /provinces                        | Create any province (admin)          |
-| PATCH  | /provinces/{id}                   | Update any province (admin)          |
-| DELETE | /provinces/{id}                   | Delete any province (admin)          |
+### Province-Destination (Pivot)
 
-**Example Requests :**
+| Method | Endpoint                             | Description                |
+| ------ | ------------------------------------ | -------------------------- |
+| GET    | /provincedestination                 | List all records           |
+| GET    | /provincedestination/{id}            | Get record by ID           |
+| GET    | /provincedestination/province/{name} | Get by province name       |
+| POST   | /provincedestination                 | Create record (admin only) |
+| PATCH  | /provincedestination/{id}            | Update record (admin only) |
+| DELETE | /provincedestination/{id}            | Delete record (admin only) |
 
-**POST : http://127.0.0.1:8888/provinces**
-```
+**Example: Link Province to Destination**
+
+```json
 {
-    "name": "Phnom Penh",
-    "description": "Cambodia's Capital City",
-    "region": "Cambodia"
+  "province_id": 23,
+  "destination_id": 1
 }
 ```
-**PATCH : http://127.0.0.1:8888/provinces/{id}**
-```
+
+---
+
+### Restaurants
+
+| Method | Endpoint                 | Description                    |
+| ------ | ------------------------ | ------------------------------ |
+| GET    | /restaurants             | List all restaurants           |
+| GET    | /restaurants/{id}        | Get restaurant by ID           |
+| GET    | /restaurants/name/{name} | Get restaurant by name         |
+| POST   | /restaurants             | Create restaurant (admin only) |
+| PATCH  | /restaurants/{id}        | Update restaurant (admin only) |
+| DELETE | /restaurants/{id}        | Delete restaurant (admin only) |
+
+**Example: Create Restaurant**
+
+```json
 {
-    "name": "Phnom Penh",
-    "description": "Cambodia's Capital"
+  "name": "The Khmer Kitchen",
+  "address": "123 Sisowath Quay, Phnom Penh",
+  "phone": "+8551234567",
+  "email": "restaurant@example.com",
+  "website": null,
+  "description": "Good taste!",
+  "opening_hours": "6:00 - 19:00"
 }
 ```
-### Province Destination Endpoints ( Pivot Table )
 
-| Method | Endpoint                       | Description                                  |
-| ------ | ------------------------------ | -------------------------------------------- |
-| GET    | /provincedestination                        | List all province        |
-| GET    | /provincedestination/{id}                   | Get a specific province by ID        |
-| GET    | /provincedestination/province/{name}        | Get a specific province by name      |
-| POST   | /provincedestination                        | Create any province (admin)          |
-| PATCH  | /provincedestination/{id}                   | Update any province (admin)          |
-| DELETE | /provincedestination/{id}                   | Delete any province (admin)          |
+---
 
-**Example Requests :**
+### Province-Restaurant (Pivot)
 
-**POST : http://127.0.0.1:8888/provincedestination**
-```
+| Method | Endpoint                              | Description                |
+| ------ | ------------------------------------- | -------------------------- |
+| GET    | /provincerestaurant                   | List all records           |
+| GET    | /provincerestaurant/{id}              | Get record by ID           |
+| GET    | /provincerestaurant/restaurant/{name} | Get by restaurant name     |
+| POST   | /provincerestaurant                   | Create record (admin only) |
+| PATCH  | /provincerestaurant/{id}              | Update record (admin only) |
+| DELETE | /provincerestaurant/{id}              | Delete record (admin only) |
+
+**Example: Link Province to Restaurant**
+
+```json
 {
-    "province_id": 23,
-    "destination_id": 1
+  "province_id": 13,
+  "restaurant_id": 12
 }
 ```
-**PATCH : http://127.0.0.1:8888/provincedestination/{id}**
-```
-{
-    "province_id": 23
-}
-```
-### Restaurant Endpoints 
 
-| Method | Endpoint                       | Description                                  |
-| ------ | ------------------------------ | -------------------------------------------- |
-| GET    | /restaurants                        | List all restaurant        |
-| GET    | /restaurants/{id}                   | Get a specific restaurant by ID        |
-| GET    | /restaurants/name/{name}            | Get a specific restaurant by name      |
-| POST   | /restaurants                        | Create any restaurant (admin)          |
-| PATCH  | /restaurants/{id}                   | Update any restaurant (admin)          |
-| DELETE | /restaurants/{id}                   | Delete any restaurant (admin)          |
+---
 
-**Example Requests :**
-
-**POST : http://127.0.0.1:8888/restaurants**
-```
-{
-    "name": "The Khmer Kitchen",
-    "address": "123 Sisowath Quay, Phnom Penh",
-    "phone": "+8551234567",
-    "email": "restaunrant@example.com",
-    "website": null,
-    "description": "Good taste!",
-    "opening_hours": "6:00 - 19:00"
-}
-```
-**PATCH : http://127.0.0.1:8888/restaurants/{id}**
-```
-{
-    "name": "The Khmer Kitchen II"
-}
-```
-### Province Restaurant Endpoints ( Pivot Table )
-
-| Method | Endpoint                       | Description                                  |
-| ------ | ------------------------------ | -------------------------------------------- |
-| GET    | /provincerestaurant                        | List all restaurant        |
-| GET    | /provincerestaurant/{id}                   | Get a specific restaurant by ID        |
-| GET    | /provincerestaurant/restaurant/{name}      | Get a specific restaurant by name      |
-| POST   | /provincerestaurant                        | Create any restaurant (admin)          |
-| PATCH  | /provincerestaurant/{id}                   | Update any restaurant (admin)          |
-| DELETE | /provincerestaurant/{id}                   | Delete any restaurant (admin)          |
-
-**Example Requests :**
-
-**POST : http://127.0.0.1:8888/provincerestaurant**
-```
-{
-    "province_id": 13,
-    "restaurant_id": 12
-}
-```
-**PATCH : http://127.0.0.1:8888/provincerestaurant/{id}**
-```
-{
-    "province_id": 13
-}
-```
 ## EER Diagram
 
-![Alt text](EERDiagram.jpg)
+![EER Diagram](EERDiagram.jpg)
+
+---
 
 ## Default Users
 
-After seeding the database, the following users are available:
+After running the seeders, the following users are created:
 
-**Admin**
+**Admin Account**
 
 * Email: `admin@example.com`
 * Password: `password123`
@@ -335,14 +297,18 @@ After seeding the database, the following users are available:
 * Email: `user@example.com`
 * Password: `password123`
 
+---
+
 ## Testing
 
-To run the tests:
+To test the API locally, start the development server:
 
 ```bash
 php -S 127.0.0.1:8888 -t public
 ```
 
+---
+
 ## License
 
-This project is open-source software licensed under the [MIT license](LICENSE).
+This project is licensed under the [MIT License](LICENSE).
