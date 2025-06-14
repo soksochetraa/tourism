@@ -1,61 +1,314 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Tourism
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A RESTful API for a tourism platform built with Laravel.
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+* Full CRUD operations for users, destinations, events, provinces, and restaurants
+* Authentication via Laravel Sanctum and JWT
+* Role-based access control (admin/user)
+* Robust validation and error handling
+* Comprehensive API documentation
+* Database migrations and seeders included
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Installation Guide
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1. **Clone the repository**
 
-## Learning Laravel
+   ```bash
+   git clone https://github.com/soksochetraa/tourism.git
+   cd tourism
+   ```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+2. **Install dependencies**
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+   ```bash
+   composer install
+   ```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+3. **Configure the environment**
 
-## Laravel Sponsors
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+4. **Set up the database connection in `.env`**
 
-### Premium Partners
+   ```
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=tourism
+   DB_USERNAME=root
+   DB_PASSWORD=
+   ```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+5. **Install and configure JWT Authentication**
 
-## Contributing
+   ```bash
+   composer require tymon/jwt-auth
+   php artisan vendor:publish --provider="Tymon\JWTAuth\Providers\LaravelServiceProvider"
+   php artisan jwt:secret
+   ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+6. **Run migrations and seeders**
 
-## Code of Conduct
+   ```bash
+   php artisan migrate --seed
+   ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+7. **Start the development server**
 
-## Security Vulnerabilities
+   ```bash
+   php -S 127.0.0.1:8888 -t public
+   ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
+
+## API Documentation
+
+**Base URL:** `http://127.0.0.1:8888`
+
+### Authentication Endpoints
+
+| Method | Endpoint  | Description         |
+| ------ | --------- | ------------------- |
+| POST   | /register | Register a new user |
+| POST   | /login    | Log in a user       |
+
+**Example: Register User**
+
+```json
+{
+  "name": "User",
+  "email": "user@example.com",
+  "password": "password123",
+  "password_confirmation": "password123"
+}
+```
+
+**Example: Register Admin**
+
+```json
+{
+  "name": "Admin",
+  "email": "admin@example.com",
+  "role": "admin",
+  "password": "password123",
+  "password_confirmation": "password123"
+}
+```
+
+**Example: Login**
+
+```json
+{
+  "email": "user@example.com",
+  "password": "password123"
+}
+```
+
+---
+
+## Resource Endpoints
+
+### Destinations
+
+| Method | Endpoint                  | Description                     |
+| ------ | ------------------------- | ------------------------------- |
+| GET    | /destinations             | List all destinations           |
+| GET    | /destinations/{id}        | Get destination by ID           |
+| GET    | /destinations/name/{name} | Get destination by name         |
+| POST   | /destinations             | Create destination (admin only) |
+| PATCH  | /destinations/{id}        | Update destination (admin only) |
+| DELETE | /destinations/{id}        | Delete destination (admin only) |
+
+**Example: Create Destination**
+
+```json
+{
+  "name": "Angkor Wat",
+  "location": "Siem Reap",
+  "description": "Ancient temple complex"
+}
+```
+
+---
+
+### Events
+
+| Method | Endpoint            | Description               |
+| ------ | ------------------- | ------------------------- |
+| GET    | /events             | List all events           |
+| GET    | /events/{id}        | Get event by ID           |
+| GET    | /events/name/{name} | Get event by name         |
+| POST   | /events             | Create event (admin only) |
+| PATCH  | /events/{id}        | Update event (admin only) |
+| DELETE | /events/{id}        | Delete event (admin only) |
+
+**Example: Create Event**
+
+```json
+{
+  "name": "Khmer New Year",
+  "description": "Cambodian New Year festival.",
+  "location": "Siem Reap",
+  "start_date": "2025-04-13 00:00:00",
+  "end_date": "2025-04-15 00:00:00"
+}
+```
+
+---
+
+### Event-Destination (Pivot)
+
+| Method | Endpoint                       | Description                        |
+| ------ | ------------------------------ | ---------------------------------- |
+| GET    | /eventdestination              | List all event-destination records |
+| GET    | /eventdestination/{id}         | Get record by ID                   |
+| GET    | /eventdestination/event/{name} | Get by event name                  |
+| POST   | /eventdestination              | Create record (admin only)         |
+| PATCH  | /eventdestination/{id}         | Update record (admin only)         |
+| DELETE | /eventdestination/{id}         | Delete record (admin only)         |
+
+**Example: Link Event to Destination**
+
+```json
+{
+  "event_id": 1,
+  "destination_id": 6
+}
+```
+
+---
+
+### Provinces
+
+| Method | Endpoint               | Description                  |
+| ------ | ---------------------- | ---------------------------- |
+| GET    | /provinces             | List all provinces           |
+| GET    | /provinces/{id}        | Get province by ID           |
+| GET    | /provinces/name/{name} | Get province by name         |
+| POST   | /provinces             | Create province (admin only) |
+| PATCH  | /provinces/{id}        | Update province (admin only) |
+| DELETE | /provinces/{id}        | Delete province (admin only) |
+
+**Example: Create Province**
+
+```json
+{
+  "name": "Phnom Penh",
+  "description": "Cambodia's capital city",
+  "region": "Cambodia"
+}
+```
+
+---
+
+### Province-Destination (Pivot)
+
+| Method | Endpoint                             | Description                |
+| ------ | ------------------------------------ | -------------------------- |
+| GET    | /provincedestination                 | List all records           |
+| GET    | /provincedestination/{id}            | Get record by ID           |
+| GET    | /provincedestination/province/{name} | Get by province name       |
+| POST   | /provincedestination                 | Create record (admin only) |
+| PATCH  | /provincedestination/{id}            | Update record (admin only) |
+| DELETE | /provincedestination/{id}            | Delete record (admin only) |
+
+**Example: Link Province to Destination**
+
+```json
+{
+  "province_id": 23,
+  "destination_id": 1
+}
+```
+
+---
+
+### Restaurants
+
+| Method | Endpoint                 | Description                    |
+| ------ | ------------------------ | ------------------------------ |
+| GET    | /restaurants             | List all restaurants           |
+| GET    | /restaurants/{id}        | Get restaurant by ID           |
+| GET    | /restaurants/name/{name} | Get restaurant by name         |
+| POST   | /restaurants             | Create restaurant (admin only) |
+| PATCH  | /restaurants/{id}        | Update restaurant (admin only) |
+| DELETE | /restaurants/{id}        | Delete restaurant (admin only) |
+
+**Example: Create Restaurant**
+
+```json
+{
+  "name": "The Khmer Kitchen",
+  "address": "123 Sisowath Quay, Phnom Penh",
+  "phone": "+8551234567",
+  "email": "restaurant@example.com",
+  "website": null,
+  "description": "Good taste!",
+  "opening_hours": "6:00 - 19:00"
+}
+```
+
+---
+
+### Province-Restaurant (Pivot)
+
+| Method | Endpoint                              | Description                |
+| ------ | ------------------------------------- | -------------------------- |
+| GET    | /provincerestaurant                   | List all records           |
+| GET    | /provincerestaurant/{id}              | Get record by ID           |
+| GET    | /provincerestaurant/restaurant/{name} | Get by restaurant name     |
+| POST   | /provincerestaurant                   | Create record (admin only) |
+| PATCH  | /provincerestaurant/{id}              | Update record (admin only) |
+| DELETE | /provincerestaurant/{id}              | Delete record (admin only) |
+
+**Example: Link Province to Restaurant**
+
+```json
+{
+  "province_id": 13,
+  "restaurant_id": 12
+}
+```
+
+---
+
+## EER Diagram
+
+![EER Diagram](EERDiagram.jpg)
+
+---
+
+## Default Users
+
+After running the seeders, the following users are created:
+
+**Admin Account**
+
+* Email: `admin@example.com`
+* Password: `password123`
+
+**Regular User**
+
+* Email: `user@example.com`
+* Password: `password123`
+
+---
+
+## Testing
+
+To test the API locally, start the development server:
+
+```bash
+php -S 127.0.0.1:8888 -t public
+```
+
+---
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is licensed under the [MIT License](LICENSE).
